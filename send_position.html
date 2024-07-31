@@ -6,10 +6,8 @@
 <body>
     <h1>Invia la tua posizione GPS</h1>
     <script>
-        const sheetId = '1vP191Zg9d7MRe850drkQ5zolSiekLGAtZNrFhks5i98';  // Sostituisci con l'ID del tuo foglio di calcolo
-
         function sendPosition(lat, lon) {
-            const url = `https://script.google.com/macros/s/AKfycby7Vu1z-0Fjprj3Gfq10L2RCslN94qxlk3XSoV9VMnIDpGJdQAsjuOqwLxb033TxGk2UA/exec`;
+            const url = `https://script.google.com/macros/s/1H35M3AiyM6dqDbuL5ktD5uDomnltKgOqUco7sXUh6gy-JQ2cnZXil1Gp/exec?lat=${lat}&lon=${lon}`;
             fetch(url)
                 .then(response => response.json())
                 .then(data => console.log(data))
