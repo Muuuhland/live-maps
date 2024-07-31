@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mappa in Tempo Reale</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([46.8182, 8.2275], 8); // Coordinate iniziali della Svizzera
+
+        // Aggiungere il tile layer
+        L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://map.geo.admin.ch">map.geo.admin.ch</a>'
+        }).addTo(map);
+
+        // Aggiungere marker della posizione corrente
+        var marker = L.marker([46.8182, 8.2275]).addTo(map);
+
+        // Funzione per aggiornare la posizione del marker
+        function updatePosition(lat, lon) {
+            marker.setLatLng([lat, lon]);
+            map.setView([lat, lon], 16); // Centra la mappa sulla nuova posizione
+        }
+
+        // Funzione per ottenere la posizione GPS
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(function(position) {
+                    updatePosition(position.coords.latitude, position.coords.longitude);
+                });
+            } else {
+                alert("Geolocalizzazione non supportata dal browser.");
+            }
+        }
+
+        // Ottenere la posizione all'avvio
+        getLocation();
+    </script>
+</body>
+</html>
