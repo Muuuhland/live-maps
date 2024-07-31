@@ -1,49 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Invia Posizione GPS</title>
+    <title>Mappa in Tempo Reale</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 100vh; }
+    </style>
 </head>
 <body>
-    <h1>Invia la tua posizione GPS</h1>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        // Configurazione di Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDrtoAAgnA6dMfbqVeHidWalTdVOrOjarM",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "live-maps-81e5e.firebaseapp.com",
-            projectId: "live-maps-81e5e",
-            storageBucket: "live-maps-81e5e.appspot.com",
-            messagingSenderId: "46035022870",
-            appId: "1:46035022870:web:3dee9637de3f9bf6dab137"
-        };
+        var map = L.map('map').setView([46.8182, 8.2275], 8); // Coordinate iniziali della Svizzera
 
-        // Inizializza Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        L.tileLayer('https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg', {
+            maxZoom: 18,
+            attribution: '&copy; <a href="https://map.geo.admin.ch">map.geo.admin.ch</a>'
+        }).addTo(map);
 
-        // Funzione per inviare la posizione GPS al database Firebase
-        function sendPosition(lat, lon) {
-            database.ref('location').set({
-                latitude: lat,
-                longitude: lon
-            });
+        var marker = L.marker([46.8182, 8.2275]).addTo(map);
+
+        function updatePosition(lat, lon) {
+            marker.setLatLng([lat, lon]);
+            map.setView([lat, lon], 16); // Centra la mappa sulla nuova posizione
         }
 
-        // Ottenere la posizione GPS e inviarla a Firebase
-        function getLocationAndSend() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(function(position) {
-                    sendPosition(position.coords.latitude, position.coords.longitude);
-                });
-            } else {
-                alert("Geolocalizzazione non supportata dal browser.");
-            }
+        async function fetchPosition() {
+            const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/YOUR_SHEET_ID/values/A2:B2?key=YOUR_API_KEY`);
+            const data = await response.json();
+            const position = data.values[0];
+            updatePosition(parseFloat(position[0]), parseFloat(position[1]));
         }
 
-        // Esegui la funzione all'avvio
-        getLocationAndSend();
+        setInterval(fetchPosition, 5000); // Aggiorna la posizione ogni 5 secondi
     </script>
 </body>
 </html>
+
