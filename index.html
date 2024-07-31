@@ -28,7 +28,7 @@
         }
 
         async function fetchPosition() {
-            const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/1vP191Zg9d7MRe850drkQ5zolSiekLGAtZNrFhks5i98/values/A2:B2?key=YOUR_API_KEY`);
+            const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/1vP191Zg9d7MRe850drkQ5zolSiekLGAtZNrFhks5i98/values/A2:B2?key=AIzaSyCDkQj0rQuc5m5B_Y8kivwck52vOk5Ie9g`);
             const data = await response.json();
             const position = data.values[0];
             updatePosition(parseFloat(position[0]), parseFloat(position[1]));
