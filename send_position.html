@@ -9,7 +9,7 @@
         const sheetId = '1vP191Zg9d7MRe850drkQ5zolSiekLGAtZNrFhks5i98';  // Sostituisci con l'ID del tuo foglio di calcolo
 
         function sendPosition(lat, lon) {
-            const url = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?lat=${lat}&lon=${lon}`;
+            const url = `https://script.google.com/macros/s/AKfycby7Vu1z-0Fjprj3Gfq10L2RCslN94qxlk3XSoV9VMnIDpGJdQAsjuOqwLxb033TxGk2UA/exec`;
             fetch(url)
                 .then(response => response.json())
                 .then(data => console.log(data))
