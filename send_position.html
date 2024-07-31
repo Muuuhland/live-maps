@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invia Posizione GPS</title>
+</head>
+<body>
+    <h1>Invia la tua posizione GPS</h1>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database.js"></script>
+    <script>
+        // Configurazione di Firebase
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Inizializza Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Funzione per inviare la posizione GPS al database Firebase
+        function sendPosition(lat, lon) {
+            database.ref('location').set({
+                latitude: lat,
+                longitude: lon
+            });
+        }
+
+        // Ottenere la posizione GPS e inviarla a Firebase
+        function getLocationAndSend() {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(function(position) {
+                    sendPosition(position.coords.latitude, position.coords.longitude);
+                });
+            } else {
+                alert("Geolocalizzazione non supportata dal browser.");
+            }
+        }
+
+        // Esegui la funzione all'avvio
+        getLocationAndSend();
+    </script>
+</body>
+</html>
